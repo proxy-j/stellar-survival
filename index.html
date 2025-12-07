@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stellar Evolution - Ship Selection</title>
+    <title>Stellar Evolution - 5 Ships Update</title>
     <style>
         body {
             margin: 0;
@@ -19,7 +19,7 @@
         
         /* UI LAYOUT */
         #ui {
-            display: none; /* Hidden until game starts */
+            display: none;
             position: absolute;
             top: 20px;
             left: 20px;
@@ -50,20 +50,24 @@
             justify-content: center;
             align-items: center;
             z-index: 20;
+            overflow-y: auto; /* Allow scroll if screen is small */
         }
         
         .ship-container {
             display: flex;
-            gap: 20px;
-            margin-top: 30px;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap; /* Allow wrapping for 5 ships */
+            justify-content: center;
+            max-width: 1200px;
         }
         
         .ship-card {
             background: #1a1a1a;
             border: 2px solid #333;
             border-radius: 10px;
-            padding: 20px;
-            width: 200px;
+            padding: 15px;
+            width: 180px;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s;
@@ -75,36 +79,51 @@
             background: #252525;
         }
 
-        .ship-card h2 { margin: 0 0 10px 0; font-size: 20px; }
-        .ship-card p { font-size: 13px; color: #aaa; }
+        .ship-card h2 { margin: 0 0 5px 0; font-size: 18px; }
+        .ship-card p { font-size: 12px; color: #aaa; margin: 5px 0; }
         .ship-preview {
-            width: 50px; height: 50px;
+            width: 40px; height: 40px;
             margin: 10px auto;
             border-radius: 50%;
             border: 1px dashed #555;
             position: relative;
         }
         
-        /* PREVIEW SHAPES IN CSS */
+        /* PREVIEW SHAPES */
         .shape-vanguard {
             width: 0; height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-bottom: 20px solid white;
-            position: absolute; top: 15px; left: 15px;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 16px solid white;
+            position: absolute; top: 12px; left: 12px;
         }
         .shape-anchor {
-            width: 20px; height: 20px;
+            width: 16px; height: 16px;
             background: orange;
-            position: absolute; top: 15px; left: 15px;
+            position: absolute; top: 12px; left: 12px;
             transform: rotate(45deg);
         }
         .shape-interceptor {
             width: 0; height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-bottom: 20px solid cyan;
+            position: absolute; top: 10px; left: 15px;
+        }
+        .shape-phantom {
+            width: 0; height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 16px solid #d630ff;
+            position: absolute; top: 12px; left: 12px;
+            opacity: 0.7;
+        }
+        .shape-acrobat {
+            width: 0; height: 0;
             border-left: 6px solid transparent;
             border-right: 6px solid transparent;
-            border-bottom: 25px solid cyan;
-            position: absolute; top: 12px; left: 19px;
+            border-bottom: 18px solid #55efc4;
+            position: absolute; top: 11px; left: 14px;
         }
 
         /* GAME OVER */
@@ -122,12 +141,18 @@
             box-shadow: 0 0 50px rgba(255, 50, 50, 0.3);
             z-index: 30;
         }
+        .button-row {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
         button {
             background: white;
             color: black;
             border: none;
-            padding: 10px 30px;
-            font-size: 18px;
+            padding: 10px 20px;
+            font-size: 16px;
             cursor: pointer;
             font-weight: bold;
             transition: transform 0.1s;
@@ -143,22 +168,36 @@
         <div class="ship-card" onclick="startGame(0)">
             <h2>VANGUARD</h2>
             <div class="ship-preview"><div class="shape-vanguard"></div></div>
-            <p style="color:white">Feature: Energy Shield</p>
-            <p>Press SPACE to become invincible for 1s.</p>
+            <p style="color:white">Ability: Shield</p>
+            <p>Become invincible for 1s.</p>
         </div>
 
         <div class="ship-card" onclick="startGame(1)">
             <h2>ANCHOR</h2>
             <div class="ship-preview"><div class="shape-anchor"></div></div>
-            <p style="color:orange">Feature: Gravity Resist</p>
-            <p>Passive: 25% resistance to all gravitational pulls.</p>
+            <p style="color:orange">Passive: Heavy</p>
+            <p>25% Gravity Resistance.</p>
         </div>
 
         <div class="ship-card" onclick="startGame(2)">
             <h2>INTERCEPTOR</h2>
             <div class="ship-preview"><div class="shape-interceptor"></div></div>
-            <p style="color:cyan">Feature: Speed Boost</p>
-            <p>Press SPACE for a burst of extreme speed.</p>
+            <p style="color:cyan">Ability: Turbo</p>
+            <p>Simple forward speed boost.</p>
+        </div>
+
+        <div class="ship-card" onclick="startGame(3)">
+            <h2>PHANTOM</h2>
+            <div class="ship-preview"><div class="shape-phantom"></div></div>
+            <p style="color:#d630ff">Ability: Phase Dash</p>
+            <p>Dash through objects safely.</p>
+        </div>
+
+        <div class="ship-card" onclick="startGame(4)">
+            <h2>ACROBAT</h2>
+            <div class="ship-preview"><div class="shape-acrobat"></div></div>
+            <p style="color:#55efc4">Passive: Agility</p>
+            <p>Double turn speed & control.</p>
         </div>
     </div>
 </div>
@@ -172,7 +211,10 @@
 <div id="game-over">
     <h1 id="death-reason">YOU DIED</h1>
     <p id="final-score">Time: 0s</p>
-    <button onclick="resetMenu()">Main Menu</button>
+    <div class="button-row">
+        <button onclick="restartGame()">Play Again</button>
+        <button onclick="resetMenu()">Main Menu</button>
+    </div>
 </div>
 
 <canvas id="gameCanvas"></canvas>
@@ -188,8 +230,9 @@
     const GAME_SPEED_MULTIPLIER = 0.5;
 
     // Game State
-    let gameState = 'MENU'; // MENU, PLAYING, GAMEOVER
+    let gameState = 'MENU'; 
     let startTime = 0;
+    let lastShipType = 0; // Remembers selection for "Play Again"
     
     // Input
     const keys = {
@@ -230,7 +273,7 @@
             this.thrust = 0.30 * GAME_SPEED_MULTIPLIER;
             this.dead = false;
             
-            // 0: Vanguard (Shield), 1: Anchor (Grav Resist), 2: Interceptor (Speed)
+            // 0: Vanguard, 1: Anchor, 2: Interceptor, 3: Phantom, 4: Acrobat
             this.shipType = shipType; 
 
             // Ability Variables
@@ -238,14 +281,19 @@
             this.abilityTimer = 0;
             this.cooldownTimer = 0;
 
-            // Set specific stats based on ship type
-            if (this.shipType === 1) { // Anchor is heavier/slower turning
+            // --- SHIP STATS ---
+            if (this.shipType === 1) { // Anchor
                 this.friction = 0.98;
                 this.turnSpeed = 0.06 * GAME_SPEED_MULTIPLIER;
             }
-            if (this.shipType === 2) { // Interceptor is snappy
+            if (this.shipType === 2) { // Interceptor
                 this.turnSpeed = 0.1 * GAME_SPEED_MULTIPLIER;
                 this.friction = 0.995;
+            }
+            if (this.shipType === 4) { // Acrobat (New Maneuverable)
+                this.turnSpeed = 0.16 * GAME_SPEED_MULTIPLIER; // Double turn speed
+                this.thrust = 0.45 * GAME_SPEED_MULTIPLIER;    // Higher acceleration
+                this.friction = 0.95; // High drag for tight turns/stopping
             }
         }
 
@@ -258,8 +306,8 @@
             if (this.shipType === 0) {
                 if (keys[" "] && this.cooldownTimer <= 0 && !this.abilityActive) {
                     this.abilityActive = true;
-                    this.abilityTimer = 60 / GAME_SPEED_MULTIPLIER; // 1 second
-                    this.cooldownTimer = 180 / GAME_SPEED_MULTIPLIER; // 3 seconds
+                    this.abilityTimer = 60 / GAME_SPEED_MULTIPLIER; 
+                    this.cooldownTimer = 180 / GAME_SPEED_MULTIPLIER;
                 }
                 if (this.abilityActive) {
                     this.abilityTimer--;
@@ -270,17 +318,37 @@
             // SHIP 2: SPEED BOOST
             if (this.shipType === 2) {
                 if (keys[" "] && this.cooldownTimer <= 0) {
-                    // Apply huge force forward
                     let boost = new Vector(Math.cos(this.angle), Math.sin(this.angle));
                     boost.mult(15 * GAME_SPEED_MULTIPLIER);
                     this.vel.add(boost);
+                    for(let i=0; i<10; i++) particles.push(new Particle(this.pos.x, this.pos.y, -boost.x*0.5, -boost.y*0.5, '#00ffff', 30));
+                    this.cooldownTimer = 120 / GAME_SPEED_MULTIPLIER; 
+                }
+            }
+
+            // SHIP 3: PHASE DASH (New)
+            if (this.shipType === 3) {
+                if (keys[" "] && this.cooldownTimer <= 0 && !this.abilityActive) {
+                    this.abilityActive = true; // Invincible/Intangible
                     
-                    // Boost particles
-                    for(let i=0; i<10; i++) {
-                        particles.push(new Particle(this.pos.x, this.pos.y, -boost.x*0.5, -boost.y*0.5, '#00ffff', 30));
+                    // Dash Force
+                    let dash = new Vector(Math.cos(this.angle), Math.sin(this.angle));
+                    dash.mult(25 * GAME_SPEED_MULTIPLIER); // Super fast
+                    this.vel = dash; // Set velocity directly (snappy dash)
+
+                    this.abilityTimer = 15 / GAME_SPEED_MULTIPLIER; // Short dash (0.25s)
+                    this.cooldownTimer = 180 / GAME_SPEED_MULTIPLIER; // 3s recharge (Same as Shield)
+                    
+                    // Particles
+                    for(let i=0; i<15; i++) particles.push(new Particle(this.pos.x, this.pos.y, (Math.random()-0.5)*5, (Math.random()-0.5)*5, '#d630ff', 40));
+                }
+
+                if (this.abilityActive) {
+                    this.abilityTimer--;
+                    if (this.abilityTimer <= 0) {
+                        this.abilityActive = false;
+                        this.vel.mult(0.2); // Stop momentum after dash
                     }
-                    
-                    this.cooldownTimer = 120 / GAME_SPEED_MULTIPLIER; // 2 seconds cooldown
                 }
             }
 
@@ -290,12 +358,14 @@
             // UI Update
             const statusDiv = document.getElementById('ability-status');
             
-            if (this.shipType === 1) {
-                statusDiv.innerText = "PASSIVE: GRAVITY RESIST (25%)";
+            if (this.shipType === 1 || this.shipType === 4) {
+                let txt = this.shipType === 1 ? "PASSIVE: GRAVITY RESIST" : "PASSIVE: HIGH AGILITY";
+                statusDiv.innerText = txt;
                 statusDiv.className = "passive";
             } else {
                 if (this.abilityActive) {
-                    statusDiv.innerText = "SHIELD ACTIVE!";
+                    let activeText = this.shipType === 3 ? "PHASING!" : "SHIELD ACTIVE!";
+                    statusDiv.innerText = activeText;
                     statusDiv.className = "ready";
                     statusDiv.style.color = "white";
                 } else if (this.cooldownTimer > 0) {
@@ -303,7 +373,10 @@
                     statusDiv.innerText = `COOLDOWN (${secondsLeft})`;
                     statusDiv.className = "cooldown";
                 } else {
-                    let name = this.shipType === 0 ? "SHIELD" : "BOOST";
+                    let name = "ABILITY";
+                    if (this.shipType === 0) name = "SHIELD";
+                    if (this.shipType === 2) name = "BOOST";
+                    if (this.shipType === 3) name = "PHASE";
                     statusDiv.innerText = `${name}: READY (SPACE)`;
                     statusDiv.className = "ready";
                 }
@@ -319,8 +392,11 @@
                 this.acc.x = Math.cos(this.angle) * this.thrust;
                 this.acc.y = Math.sin(this.angle) * this.thrust;
                 
-                // Thruster particles
-                let pColor = (this.shipType === 2) ? '#00ffff' : '#ffa500'; // Blue for speedster
+                let pColor = '#ffa500';
+                if(this.shipType === 2) pColor = '#00ffff';
+                if(this.shipType === 3) pColor = '#d630ff';
+                if(this.shipType === 4) pColor = '#55efc4';
+
                 for(let i=0; i<2; i++) {
                     particles.push(new Particle(
                         this.pos.x - Math.cos(this.angle) * 10 + (Math.random()-0.5)*5,
@@ -361,42 +437,37 @@
             if (this.shipType === 0) { // VANGUARD (Triangle)
                 if (this.abilityActive) {
                     ctx.save();
-                    ctx.strokeStyle = '#00ffff';
-                    ctx.lineWidth = 3;
-                    ctx.shadowBlur = 15;
-                    ctx.shadowColor = '#00ffff';
-                    ctx.beginPath();
-                    ctx.arc(0, 0, this.radius + 15, 0, Math.PI * 2);
-                    ctx.stroke();
-                    ctx.fillStyle = 'rgba(0, 255, 255, 0.1)';
-                    ctx.fill();
-                    ctx.restore();
+                    ctx.strokeStyle = '#00ffff'; ctx.lineWidth = 3; ctx.shadowBlur = 15; ctx.shadowColor = '#00ffff';
+                    ctx.beginPath(); ctx.arc(0, 0, this.radius + 15, 0, Math.PI * 2); ctx.stroke();
+                    ctx.fillStyle = 'rgba(0, 255, 255, 0.1)'; ctx.fill(); ctx.restore();
                 }
                 ctx.beginPath();
-                ctx.moveTo(15, 0);
-                ctx.lineTo(-10, 10);
-                ctx.lineTo(-5, 0);
-                ctx.lineTo(-10, -10);
-                ctx.closePath();
-                ctx.strokeStyle = 'white';
+                ctx.moveTo(15, 0); ctx.lineTo(-10, 10); ctx.lineTo(-5, 0); ctx.lineTo(-10, -10);
+                ctx.closePath(); ctx.strokeStyle = 'white';
             } 
-            else if (this.shipType === 1) { // ANCHOR (Boxy/Heavy)
+            else if (this.shipType === 1) { // ANCHOR (Boxy)
                 ctx.beginPath();
-                ctx.moveTo(12, -8);
-                ctx.lineTo(12, 8);
-                ctx.lineTo(-10, 12);
-                ctx.lineTo(-10, -12);
-                ctx.closePath();
-                ctx.strokeStyle = 'orange';
+                ctx.moveTo(12, -8); ctx.lineTo(12, 8); ctx.lineTo(-10, 12); ctx.lineTo(-10, -12);
+                ctx.closePath(); ctx.strokeStyle = 'orange';
             }
             else if (this.shipType === 2) { // INTERCEPTOR (Needle)
                 ctx.beginPath();
-                ctx.moveTo(20, 0);
-                ctx.lineTo(-15, 6);
-                ctx.lineTo(-10, 0);
-                ctx.lineTo(-15, -6);
-                ctx.closePath();
-                ctx.strokeStyle = 'cyan';
+                ctx.moveTo(20, 0); ctx.lineTo(-15, 6); ctx.lineTo(-10, 0); ctx.lineTo(-15, -6);
+                ctx.closePath(); ctx.strokeStyle = 'cyan';
+            }
+            else if (this.shipType === 3) { // PHANTOM (Ghostly)
+                ctx.globalAlpha = this.abilityActive ? 0.4 : 1.0; // Transparent when phasing
+                ctx.beginPath();
+                ctx.moveTo(15, 0); ctx.lineTo(-10, 8); ctx.lineTo(-10, -8);
+                ctx.closePath(); ctx.strokeStyle = '#d630ff';
+                if (this.abilityActive) {
+                    ctx.shadowBlur = 20; ctx.shadowColor = '#d630ff';
+                }
+            }
+            else if (this.shipType === 4) { // ACROBAT (Dart)
+                ctx.beginPath();
+                ctx.moveTo(15, 0); ctx.lineTo(-8, 12); ctx.lineTo(-4, 0); ctx.lineTo(-8, -12);
+                ctx.closePath(); ctx.strokeStyle = '#55efc4';
             }
 
             ctx.lineWidth = 2;
@@ -476,7 +547,8 @@
             if (this.radius > 120 && this.type === 3) this.supernovaExplode(); 
 
             if (this.type === 2) { 
-                const wobble = Math.sin(this.age * 0.15 * GAME_SPEED_MULTIPLIER) * 0.8; 
+                // --- CHANGED: FASTER FREQ, TIGHTER AMP ---
+                const wobble = Math.sin(this.age * 0.30 * GAME_SPEED_MULTIPLIER) * 0.3; 
                 this.effectiveBeamAngle = this.baseBeamAngle + wobble; 
 
                 this.beamTimer++;
@@ -492,7 +564,10 @@
                         this.beamTimer = 0;
                     }
                 } else if (this.beamState === 'FIRE') {
-                    if (!player.dead && !(player.shipType === 0 && player.abilityActive)) {
+                    // Check Collision
+                    let isProtected = (player.shipType === 0 && player.abilityActive) || (player.shipType === 3 && player.abilityActive);
+                    
+                    if (!player.dead && !isProtected) {
                         let dx = player.pos.x - this.pos.x;
                         let dy = player.pos.y - this.pos.y;
                         let dist = Math.sqrt(dx*dx + dy*dy);
@@ -546,8 +621,10 @@
                 let dx = this.pos.x - player.pos.x;
                 let dy = this.pos.y - player.pos.y;
                 let dist = Math.sqrt(dx*dx + dy*dy);
-                // Shield check (Ship 0 only)
-                if (dist < 150 && !(player.shipType === 0 && player.abilityActive)) { 
+                
+                let isProtected = (player.shipType === 0 && player.abilityActive) || (player.shipType === 3 && player.abilityActive);
+
+                if (dist < 150 && !isProtected) { 
                     gameOver("Vaporized by Pulsar Core Collapse");
                 }
                 this.mass = 200;
@@ -569,8 +646,9 @@
             let dy = this.pos.y - player.pos.y;
             let dist = Math.sqrt(dx*dx + dy*dy);
             
-            // Shield check (Ship 0 only)
-            if (dist < 300 && !(player.shipType === 0 && player.abilityActive)) {
+            let isProtected = (player.shipType === 0 && player.abilityActive) || (player.shipType === 3 && player.abilityActive);
+            
+            if (dist < 300 && !isProtected) {
                 gameOver("Incinerated by Supernova");
             }
             let bh = new Entity(this.pos.x, this.pos.y, 20, 4); 
@@ -668,7 +746,8 @@
             let speed = 6 * GAME_SPEED_MULTIPLIER;
             this.vel = new Vector(Math.cos(angle)*speed, Math.sin(angle)*speed);
             this.radius = 6;
-            this.life = 100 / GAME_SPEED_MULTIPLIER; 
+            // --- CHANGED: LONGER LIFE ---
+            this.life = 180 / GAME_SPEED_MULTIPLIER; 
         }
         update() {
             this.pos.add(this.vel);
@@ -733,7 +812,7 @@
             let dy = entity.pos.y - target.pos.y;
             let distSq = dx*dx + dy*dy;
             
-            if (distSq > 360000) continue; // 600^2
+            if (distSq > 360000) continue; 
 
             let forceMagnitude = (entity.mass * 50) / distSq;
             
@@ -744,9 +823,8 @@
             }
 
             // --- SHIP 1: ANCHOR RESISTANCE ---
-            // If target is player and is ship type 1 (Anchor)
             if (target === player && player.shipType === 1) {
-                forceMagnitude *= 0.75; // 25% resistance
+                forceMagnitude *= 0.75; 
             }
 
             let pull = new Vector(dx, dy);
@@ -767,7 +845,6 @@
             let dy = bh.pos.y - target.pos.y;
             let distSq = dx*dx + dy*dy;
             
-            // --- CHANGED: 3000 -> 1000 ---
             let forceStrength = bh.radius * 1000; 
 
             let force = (forceStrength / distSq) * GAME_SPEED_MULTIPLIER; 
@@ -807,8 +884,12 @@
 
             let visualRadius = e.getVisualRadius();
 
+            // --- SHIP 3: PHANTOM INTANGIBILITY ---
+            if (player.shipType === 3 && player.abilityActive) continue;
+
             if (e.type === 4) {
                 if (dist < visualRadius + player.radius) {
+                    // Protected by shield (Ship 0)
                     if (!(player.shipType === 0 && player.abilityActive)) { 
                         gameOver("Swallowed by Black Hole");
                     }
@@ -833,7 +914,11 @@
             let dx = player.pos.x - p.pos.x;
             let dy = player.pos.y - p.pos.y;
             if (Math.sqrt(dx*dx + dy*dy) < player.radius + p.radius) {
-                if (!(player.shipType === 0 && player.abilityActive)) {
+                
+                // Check Invincibility (Ship 0) or Phase (Ship 3)
+                let isProtected = (player.shipType === 0 && player.abilityActive) || (player.shipType === 3 && player.abilityActive);
+                
+                if (!isProtected) {
                     gameOver("Hit by Supernova Debris");
                 }
             }
@@ -907,10 +992,17 @@
         particles = [];
         projectiles = [];
         
+        lastShipType = type; // Remember selection
         player = new Player(type);
         startTime = Date.now();
         gameState = 'PLAYING';
         gameRunning = true;
+    }
+
+    // --- CHANGED: NEW RESTART FUNCTION ---
+    function restartGame() {
+        document.getElementById('game-over').style.display = 'none';
+        startGame(lastShipType);
     }
 
     function resetMenu() {
@@ -918,7 +1010,7 @@
         document.getElementById('ui').style.display = 'none';
         document.getElementById('menu').style.display = 'flex';
         gameState = 'MENU';
-        gameRunning = true; // Keep loop running for background
+        gameRunning = true; 
     }
 
     // --- Main Loop ---
@@ -938,7 +1030,6 @@
             });
         }
         
-        // Dummy player for background loop before start
         player = new Player(0); 
 
         loop();
@@ -963,7 +1054,7 @@
         }
 
         if (gameState === 'MENU') {
-            return; // Don't run game logic
+            return; 
         }
 
         if (!gameRunning) return;
